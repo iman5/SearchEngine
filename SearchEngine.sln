@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 25.0.1706.4
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SearchEngine.API", "SearchEngine.API\SearchEngine.API.csproj", "{BFCDE31D-ABB3-4D79-9194-6D7C373B06FB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SearchEngine.UI", "SearchEngine.UI\SearchEngine.UI.csproj", "{941C81A1-AB4A-4AC1-8FE3-E534841029BE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BFCDE31D-ABB3-4D79-9194-6D7C373B06FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFCDE31D-ABB3-4D79-9194-6D7C373B06FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFCDE31D-ABB3-4D79-9194-6D7C373B06FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFCDE31D-ABB3-4D79-9194-6D7C373B06FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{941C81A1-AB4A-4AC1-8FE3-E534841029BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{941C81A1-AB4A-4AC1-8FE3-E534841029BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{941C81A1-AB4A-4AC1-8FE3-E534841029BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{941C81A1-AB4A-4AC1-8FE3-E534841029BE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {19BD0292-F4A2-457B-B9ED-C0A5AE03952D}
+	EndGlobalSection
+EndGlobal

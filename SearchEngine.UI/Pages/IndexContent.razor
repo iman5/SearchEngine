@@ -1,0 +1,98 @@
+﻿@*
+    Adding the needed models to the page.
+    @page will create a routing to the IndexContent page.
+    Injecting the HttpClient with the DI to call the backend microservice.
+*@
+@using SearchEngine.UI.Models
+@page "/IndexContent"
+@inject HttpClient Http
+
+<PageTitle>Content Indexing</PageTitle>
+
+@*
+    A form is used to gather the needed data as a contentModel.
+    The form consists of a multiline text of content and the CreatedDate of the content.
+*@
+<div class="card">
+    <div class="card-header">
+        Lucene Search Engine Service
+    </div>
+    <div class="card-body">
+
+        <h5 class="card-title">Content Indexing</h5>
+        <p class="card-text">This component demonstrates indexing content from the server''s Micro Service API.</p>
+
+        <form>
+            <div class="form-row">
+
+                <EditForm Model="@contentModel" OnValidSubmit="@SubmitIndexContentAsync">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+                    <div class="form-group col-md-10">
+                        <label>
+                            Content (Multiline text):
+                        </label>
+                        <InputTextArea @bind-Value="contentModel!.Content" class="form-control" placeholder="Input Content ..." />
+                    </div>
+                    <div class="form-group col-md-3 mt-2">
+                        <label>
+                            Created Date:
+                        </label>
+                        <InputDate Type="InputDateType.DateTimeLocal" @bind-Value="contentModel!.CreatedDate" class="form-control" />
+                    </div>
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+
+                </EditForm>
+
+            </div>
+        </form>
+
+    </div>
+</div>
+
+@*The results will be shown when the SubmitIndexContentAsync method is ran*@
+<p class="mt-5">@Result</p>
+
+
+
+@code {
+    // Needed variables for the page to store the content data and send via the HTTPClient service.
+    private ContentModel? contentModel { get; set; } = new();
+    private List<ContentModel> contentModels = new List<ContentModel>();
+    private string BaseURI = "/api/v1/Content/IndexContent/";
+    private string? Result { get; set; }
+
+    /// <summary>
+    /// This method will run when submitting the request via UI.
+    /// The binded model will be sent to the IndexContent of the backend API to storing and indexing of the contents.
+    /// Results will be shown after the submission.
+    /// </summary>
+    /// <returns></returns>
+    private async Task SubmitIndexContentAsync()
+    {
+        try
+        {
+            //Checking if the model has the binded content before sending the request.
+            if (contentModel is not null)
+            {
+                //Adding the form contents to the list of contents and posting them as JSON to the backend API, while updating the UI according to the results.
+                contentModels.Add(contentModel);
+                var result = await Http.PostAsJsonAsync<IEnumerable<ContentModel>>(BaseURI, contentModels);
+                Result = result.IsSuccessStatusCode == true ? "Successfully added the content to the Search Engine and indexed all the tokens." : "Failed to add the content for indexing.";
+                contentModel = new ContentModel {Content="", CreatedDate=DateTime.MinValue};
+            }
+            else { Result = "failed to load the data."; }
+        }
+        catch (Exception ex)
+        {
+            //Log exceptions and respond accordingly to the request
+            contentModel = null;
+            Console.WriteLine($"Exception calling the Search Content. Exception Message: {ex.Message}");
+        }
+    }
+}
+
+
+

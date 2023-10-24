@@ -1,0 +1,50 @@
+﻿@*
+    Nav menu is created using the Bootstarp framework.
+    The name of the app is added in place of an icon.
+*@
+<div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="">IC Search Engine</a>
+        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+</div>
+
+@*
+    Routing of the app is created by ading the Index Content and Search Content after the home link.
+*@
+<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
+    <nav class="flex-column">
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                <span class="oi oi-home" aria-hidden="true"></span> Home
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="IndexContent">
+                <span class="oi oi-plus" aria-hidden="true"></span> Index Content
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="SearchContent">
+                <span class="oi oi-list-rich" aria-hidden="true"></span> Search Content
+            </NavLink>
+        </div>
+    </nav>
+</div>
+
+@*
+    Toggling NavMenu when needed.
+*@
+@code {
+    private bool collapseNavMenu = true;
+
+    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+}
+

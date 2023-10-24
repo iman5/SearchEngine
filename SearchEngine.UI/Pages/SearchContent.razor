@@ -1,0 +1,119 @@
+﻿@*
+    Adding the needed models to the page.
+    @page will create a routing to the SearchContent page.
+    Injecting the HttpClient with the DI to call the backend microservice.
+*@
+@using SearchEngine.UI.Models
+@using System.Globalization;
+@page "/SearchContent"
+@inject HttpClient Http
+
+
+<PageTitle>Content Searching</PageTitle>
+
+@*
+    A form is used to gather the needed data as a contentModel.
+    The form consists of a text of content and the CreatedDate of the content.
+*@
+<div class="card">
+
+    <div class="card-header">
+        Lucene Search Engine Service
+    </div>
+
+    <div class="card-body">
+
+        <h5 class="card-title">Content Searching</h5>
+        <p class="card-text">This component demonstrates searching content from the server Micro Service API.</p>
+
+        <form>
+            <div class="form-row">
+                <EditForm Model="@contentModel" OnValidSubmit="@SubmitSearchContentAsync">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+                    <div class="form-group col-md-10">
+                        <label>
+                            Search Key:
+                        </label>
+                        <InputText @bind-Value="contentModel!.Content" class="form-control" placeholder="Search Content ..." />
+                    </div>
+                    <div class="form-group col-md-3 mt-2">
+                        <label>
+                            From Date:
+                        </label>
+                        <InputDate Type="InputDateType.DateTimeLocal" @bind-Value="contentModel!.CreatedDate" class="form-control" />
+                    </div>
+
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </EditForm>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+@*
+    The results will be shown when the SubmitSearchContentAsync method is ran.
+    If the contentModels is null, No Content will be shown, as well as after each search if there is no hits.
+*@
+@if (contentModels == null)
+{
+    <p class="mt-5"><em>No Content</em></p>
+}
+else
+{
+    <table class="table table-striped mt-5">
+        <thead>
+            <tr>
+                <th>Created Date</th>
+                <th>Content</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var content in contentModels)
+            {
+                <tr>
+                    <td>@content.CreatedDate.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)</td>
+                    <td>@content.Content</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    // Needed variables for the page to store the content data and request via the HTTPClient service.
+    private ContentModel? contentModel { get; set; } = new();
+    private IEnumerable<ContentModel>? contentModels;
+    private string BaseURI = "/api/v1/Content/SearchContent/";
+
+    /// <summary>
+    /// This method will run when submitting the request via UI.
+    /// The binded model will be sent to the SearchContent of the backend API to search for the contents.
+    /// Results will be shown after the submission.
+    /// </summary>
+    /// <returns></returns>
+    private async Task SubmitSearchContentAsync()
+    {
+        try
+        {
+            //Requesting the contents as JSON from the backend API, while updating the UI according to the results.
+            contentModels = await Http.GetFromJsonAsync<IEnumerable<ContentModel>>($"{BaseURI}{contentModel?.Content}/{contentModel?.CreatedDate.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)}");
+        }
+        catch (System.Net.Http.HttpRequestException)
+        {
+            //If there is no contents to show, set the UI to show No Content.
+            contentModels = null;
+        }
+        catch (Exception ex)
+        {
+            //Log exceptions and respond accordingly to the request
+            contentModels = null;
+            Console.WriteLine($"Exception calling the Search Content. Exception Message: {ex.Message}");
+        }
+
+    }
+}
+
