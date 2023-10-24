@@ -41,6 +41,7 @@ Both of these services are linked to the startup project under the name “Multi
 ###### SearchEngine.API Service:
 - https://localhost:7187
 - http://localhost:5036
+
 These ports can be modified in the project launchSettings if needed. e.g., in the circumstance of ports being unavailable.
 ### SearchEngine.API Service Module Overview
 Here are listed all the aspects of the API project, with details for each section.
